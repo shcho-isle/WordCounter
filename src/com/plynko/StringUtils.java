@@ -29,7 +29,7 @@ public final class StringUtils {
 
     public static String getPage(String url) throws IOException {
         String page = new Scanner(new URL(url).openStream(), "UTF-8").useDelimiter("\\A").next();
-        page = removeUTF8BOM(page);
+        page = removeUTF8BOM(page.trim());
         for (String prefix : ACCEPTABLE_PAGE_PREFIXES) {
             if (startsWith(page, prefix)) {
                 return page;
