@@ -10,9 +10,9 @@ import java.util.stream.Collectors;
 public final class StringUtils {
 
     private static final List<String> ACCEPTABLE_URL_PREFIXES = Arrays.asList("http://");
-    private static final List<String> ACCEPTABLE_PAGE_PREFIXES = Arrays.asList("<!DOCTYPE HTML", "<html>");
+    private static final List<String> ACCEPTABLE_PAGE_PREFIXES = Arrays.asList("<!DOCTYPE HTML", "<html");
     private static final String DELIMITERS = "([\\s,-.;]+)|(<[^<]+?>)";
-    private static final String IGNORED_WORDS = "^$|.*[\\d\\p{Punct}]+.*";
+    private static final String IGNORED_WORDS = "^$|.*?[\\d\\p{Punct}]+.*";
     private static final List<String> IGNORED_TAGS = Arrays.asList("style", "script", "image", "object");
 
     private StringUtils() {
@@ -61,7 +61,7 @@ public final class StringUtils {
                 .collect(Collectors.toList());
     }
 
-    public static Map<String, Long> getSortedCountedMap(List<String> wordsList) {
+    public static Map<String, Long> getWordsSortedMap(List<String> wordsList) {
         Map<String, Long> countedWords = wordsList.stream()
                 .collect(
                         Collectors.groupingBy(Function.identity(), Collectors.counting())

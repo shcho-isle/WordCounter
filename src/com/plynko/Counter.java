@@ -15,7 +15,7 @@ public class Counter {
         List<String> wordsList = getWordsList(page);
         System.out.println("Total number of words is: " + wordsList.size());
 
-        Map<String, Long> sortedWords = getSortedCountedMap(wordsList);
-        sortedWords.forEach((k, v) -> System.out.println(v + "\t" + k));
+        Map<String, Long> wordsSortedMap = getWordsSortedMap(wordsList);
+        wordsSortedMap.forEach((k, v) -> System.out.println(v + "\t" + k));
     }
 }
