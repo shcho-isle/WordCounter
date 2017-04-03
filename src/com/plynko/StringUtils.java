@@ -11,7 +11,7 @@ public final class StringUtils {
 
     private static final List<String> ACCEPTABLE_URL_PREFIXES = Arrays.asList("http://");
     private static final List<String> ACCEPTABLE_PAGE_PREFIXES = Arrays.asList("<!DOCTYPE HTML", "<html");
-    private static final String DELIMITERS = "([\\s,-.;]+)|(<[^<]+?>)";
+    private static final String DELIMITERS = "([\\s,-.;]+)|(<[^<]*?>)";
     private static final String IGNORED_WORDS = "^$|.*?[\\d\\p{Punct}]+.*";
     private static final List<String> IGNORED_TAGS = Arrays.asList("style", "script", "image", "object");
 
@@ -38,7 +38,7 @@ public final class StringUtils {
         throw new IllegalArgumentException("This URL – " + url + " - does not contain HTML content");
     }
 
-    public static boolean startsWith(String s, String prefix) {
+    private static boolean startsWith(String s, String prefix) {
         return s.regionMatches(true, 0, prefix, 0, prefix.length());
     }
 
@@ -51,14 +51,7 @@ public final class StringUtils {
 
     public static List<String> getWordsList(String page) {
         if (IGNORED_TAGS.size() > 0) {
-            StringBuilder regex = new StringBuilder("");
-            String or = "";
-            for (String tag : IGNORED_TAGS) {
-                regex.append(String.format("%2$s(<%1$s.*?>.*?</%1$s>)", tag, or));
-                or = "|";
-            }
-            Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-            page = pattern.matcher(page).replaceAll(" ");
+            page = removeTags(page);
         }
 
         String[] wordsArray = page.split(DELIMITERS);
@@ -66,6 +59,19 @@ public final class StringUtils {
         return Arrays.stream(wordsArray)
                 .filter(w -> !w.matches(IGNORED_WORDS))
                 .collect(Collectors.toList());
+    }
+
+    private static String removeTags(String page) {
+        StringBuilder regex = new StringBuilder("");
+        String or = "";
+        for (String tag : IGNORED_TAGS) {
+            regex.append(String.format("%2$s(<%1$s.*?>.*?</%1$s>)", tag, or));
+            or = "|";
+        }
+
+        Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+
+        return pattern.matcher(page).replaceAll(" ");
     }
 
     public static Map<String, Long> getWordsSortedMap(List<String> wordsList) {
