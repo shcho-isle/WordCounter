@@ -50,12 +50,19 @@ public final class StringUtils {
     }
 
     public static List<String> getWordsList(String page) {
-        for (String tag : IGNORED_TAGS) {
-            String regex = "<" + tag + ".*?>.*?</" + tag + ">";
-            Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        if (IGNORED_TAGS.size() > 0) {
+            StringBuilder regex = new StringBuilder("");
+            String or = "";
+            for (String tag : IGNORED_TAGS) {
+                regex.append(String.format("%2$s(<%1$s.*?>.*?</%1$s>)", tag, or));
+                or = "|";
+            }
+            Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
             page = pattern.matcher(page).replaceAll(" ");
         }
+
         String[] wordsArray = page.split(DELIMITERS);
+
         return Arrays.stream(wordsArray)
                 .filter(w -> !w.matches(IGNORED_WORDS))
                 .collect(Collectors.toList());
