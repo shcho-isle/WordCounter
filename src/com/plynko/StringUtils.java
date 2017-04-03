@@ -42,7 +42,7 @@ public final class StringUtils {
         return s.regionMatches(true, 0, prefix, 0, prefix.length());
     }
 
-    public static String removeUTF8BOM(String s) {
+    private static String removeUTF8BOM(String s) {
         if (s.startsWith("\uFEFF")) {
             s = s.substring(1);
         }
@@ -69,7 +69,7 @@ public final class StringUtils {
             or = "|";
         }
 
-        String regex = String.format("<(%s)[^<]*?>.*?</\1>", regexBuilder.toString());
+        String regex = String.format("<(%s)[^<]*?>.*?</\\1>", regexBuilder.toString());
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
         return pattern.matcher(page).replaceAll(" ");
