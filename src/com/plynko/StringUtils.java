@@ -62,23 +62,26 @@ public final class StringUtils {
     }
 
     private static String removeTags(String page) {
-        StringBuilder regex = new StringBuilder("");
+        StringBuilder regexBuilder = new StringBuilder("");
         String or = "";
         for (String tag : IGNORED_TAGS) {
-            regex.append(String.format("%2$s(<%1$s.*?>.*?</%1$s>)", tag, or));
+            regexBuilder.append(or).append(tag);
             or = "|";
         }
 
-        Pattern pattern = Pattern.compile(regex.toString(), Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        String regex = String.format("<(%s)[^<]*?>.*?</\1>", regexBuilder.toString());
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
 
         return pattern.matcher(page).replaceAll(" ");
     }
 
     public static Map<String, Long> getWordsSortedMap(List<String> wordsList) {
-        Map<String, Long> countedWords = wordsList.stream()
+        return wordsList.stream()
                 .collect(
-                        Collectors.groupingBy(Function.identity(), Collectors.counting())
+                        Collectors.groupingBy(
+                                Function.identity(),
+                                TreeMap::new,
+                                Collectors.counting())
                 );
-        return new TreeMap<>(countedWords);
     }
 }
