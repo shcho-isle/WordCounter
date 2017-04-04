@@ -1,6 +1,7 @@
 package com.plynko;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import static com.plynko.StringUtils.*;
 
 public class Counter {
     public static void main(String[] args) throws IOException {
-        String url = args[0];
+        URL url = new URL(args[0]);
         checkUrl(url);
         String page = getPage(url);
 

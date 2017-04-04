@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public final class StringUtils {
 
-    private static final List<String> ACCEPTABLE_URL_PREFIXES = Arrays.asList("http://");
+    private static final List<String> ACCEPTABLE_PROTOCOLS = Arrays.asList("http");
     private static final List<String> ACCEPTABLE_PAGE_PREFIXES = Arrays.asList("<!DOCTYPE HTML", "<html");
     private static final String DELIMITERS = "([\\s,-.;]+)|(<[^<]*?>)";
     private static final String IGNORED_WORDS = "^$|.*?[\\d\\p{Punct}]+.*";
@@ -18,17 +18,17 @@ public final class StringUtils {
     private StringUtils() {
     }
 
-    public static void checkUrl(String url) {
-        for (String prefix : ACCEPTABLE_URL_PREFIXES) {
-            if (startsWith(url, prefix)) {
+    public static void checkUrl(URL url) {
+        for (String protocol : ACCEPTABLE_PROTOCOLS) {
+            if (url.getProtocol().equals(protocol)) {
                 return;
             }
         }
-        throw new IllegalArgumentException("Acceptable URL prefixes:" + ACCEPTABLE_URL_PREFIXES);
+        throw new IllegalArgumentException("Acceptable protocols: " + ACCEPTABLE_PROTOCOLS);
     }
 
-    public static String getPage(String url) throws IOException {
-        String page = new Scanner(new URL(url).openStream(), "UTF-8").useDelimiter("\\A").next();
+    public static String getPage(URL url) throws IOException {
+        String page = new Scanner(url.openStream(), "UTF-8").useDelimiter("\\A").next();
         page = removeUTF8BOM(page.trim());
         for (String prefix : ACCEPTABLE_PAGE_PREFIXES) {
             if (startsWith(page, prefix)) {
