@@ -9,32 +9,34 @@ import java.util.stream.Collectors;
 
 public final class StringUtils {
 
-    private static final List<String> ACCEPTABLE_PROTOCOLS = Arrays.asList("http", "test");
-    private static final List<String> ACCEPTABLE_PAGE_PREFIXES = Arrays.asList("<!DOCTYPE HTML", "<html");
-    private static final String DELIMITERS = "([\\s,-.;]+)|(<[^<]*?>)";
-    private static final String IGNORED_WORDS = "^$|.*?[\\d\\p{Punct}]+.*";
-    private static final List<String> IGNORED_TAGS = Arrays.asList("style", "script", "image", "object");
+    private final static ResourceBundle config = ResourceBundle.getBundle("com.plynko.config");
 
     private StringUtils() {
     }
 
     public static void checkUrl(URL url) {
-        for (String protocol : ACCEPTABLE_PROTOCOLS) {
+        String[] protocols = config.getString("protocols").split(",");
+
+        for (String protocol : protocols) {
             if (url.getProtocol().equals(protocol)) {
                 return;
             }
         }
-        throw new IllegalArgumentException("Acceptable protocols: " + ACCEPTABLE_PROTOCOLS);
+
+        throw new IllegalArgumentException("Acceptable protocols: " + Arrays.toString(protocols));
     }
 
     public static String getPage(URL url) throws IOException {
         String page = new Scanner(url.openStream(), "UTF-8").useDelimiter("\\A").next();
         page = removeUTF8BOM(page.trim());
-        for (String prefix : ACCEPTABLE_PAGE_PREFIXES) {
+
+        String[] prefixes = config.getString("prefixes").split(",");
+        for (String prefix : prefixes) {
             if (startsWith(page, prefix)) {
                 return page;
             }
         }
+
         throw new IllegalArgumentException("This URL – " + url + " - does not contain HTML content");
     }
 
@@ -50,29 +52,26 @@ public final class StringUtils {
     }
 
     public static List<String> getWordsList(String page) {
-        if (IGNORED_TAGS.size() > 0) {
-            page = removeTags(page);
+        String[] ignoredTags = config.getString("ignored_tags").split(",");
+
+        if (ignoredTags.length > 0) {
+            StringBuilder regexBuilder = new StringBuilder("");
+            String or = "";
+            for (String tag : ignoredTags) {
+                regexBuilder.append(or).append(tag);
+                or = "|";
+            }
+
+            String regex = String.format("<(%s)[^<]*?>.*?</\\1>", regexBuilder.toString());
+            Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+            page = pattern.matcher(page).replaceAll(" ");
         }
 
-        String[] wordsArray = page.split(DELIMITERS);
+        String[] wordsArray = page.split(config.getString("delimiters"));
 
         return Arrays.stream(wordsArray)
-                .filter(w -> !w.matches(IGNORED_WORDS))
+                .filter(w -> !w.matches(config.getString("ignored_words")))
                 .collect(Collectors.toList());
-    }
-
-    private static String removeTags(String page) {
-        StringBuilder regexBuilder = new StringBuilder("");
-        String or = "";
-        for (String tag : IGNORED_TAGS) {
-            regexBuilder.append(or).append(tag);
-            or = "|";
-        }
-
-        String regex = String.format("<(%s)[^<]*?>.*?</\\1>", regexBuilder.toString());
-        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-
-        return pattern.matcher(page).replaceAll(" ");
     }
 
     public static Map<String, Long> getWordsSortedMap(List<String> wordsList) {
