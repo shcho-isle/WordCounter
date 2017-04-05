@@ -9,7 +9,12 @@ import static com.plynko.StringUtils.*;
 
 public class Counter {
     public static void main(String[] args) throws IOException {
+        if (args.length == 0) {
+            throw new IllegalArgumentException("No URL specified.");
+        }
+
         URL url = new URL(args[0]);
+
         checkUrl(url);
         String page = getPage(url);
 

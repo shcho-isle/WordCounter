@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public final class StringUtils {
 
-    private static final List<String> ACCEPTABLE_PROTOCOLS = Arrays.asList("http");
+    private static final List<String> ACCEPTABLE_PROTOCOLS = Arrays.asList("http", "test");
     private static final List<String> ACCEPTABLE_PAGE_PREFIXES = Arrays.asList("<!DOCTYPE HTML", "<html");
     private static final String DELIMITERS = "([\\s,-.;]+)|(<[^<]*?>)";
     private static final String IGNORED_WORDS = "^$|.*?[\\d\\p{Punct}]+.*";
