@@ -62,16 +62,9 @@ public final class StringUtils {
     }
 
     private static String removeTags(String page) {
-        StringBuilder regexBuilder = new StringBuilder("");
-        String or = "";
-        for (String tag : IGNORED_TAGS) {
-            regexBuilder.append(or).append(tag);
-            or = "|";
-        }
-
-        String regex = String.format("<(%s)[^<]*?>.*?</\\1>", regexBuilder.toString());
+        String tags = IGNORED_TAGS.stream().collect(Collectors.joining("|"));
+        String regex = String.format("<(%s)[^<]*?>.*?</\\1>", tags);
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-
         return pattern.matcher(page).replaceAll(" ");
     }
 

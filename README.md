@@ -2,14 +2,11 @@
 The program calculates the total number of words on the given page and the number of repetitions for each word.
 
 ## Code Example
-    public static Map<String, Long> getWordsSortedMap(List<String> wordsList) {
-        return wordsList.stream()
-                .collect(
-                        Collectors.groupingBy(
-                                Function.identity(),
-                                TreeMap::new,
-                                Collectors.counting())
-                );
+    private static String removeTags(String page) {
+        String tags = IGNORED_TAGS.stream().collect(Collectors.joining("|"));
+        String regex = String.format("<(%s)[^<]*?>.*?</\\1>", tags);
+        Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
+        return pattern.matcher(page).replaceAll(" ");
     }
     
 ## Launching

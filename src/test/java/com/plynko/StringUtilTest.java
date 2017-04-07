@@ -8,6 +8,10 @@ import org.junit.rules.ExpectedException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static com.plynko.StringUtils.*;
 
@@ -34,7 +38,14 @@ public class StringUtilTest {
     }
 
     @Test
-    public void getWordsListTest() throws IOException {
-        //
+    public void getWordsSortedMapTest() throws IOException {
+        Map<String, Long> actual = getWordsSortedMap(Arrays.asList("aaa", "ddd", "aaa", "bbb", "ccc", "aaa", "aaa"));
+        Map<String, Long> expected = new TreeMap<>();
+        expected.put("aaa", 4L);
+        expected.put("bbb", 1L);
+        expected.put("ccc", 1L);
+        expected.put("ddd", 1L);
+
+        Assert.assertEquals(actual, expected);
     }
 }
