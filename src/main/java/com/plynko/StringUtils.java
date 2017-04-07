@@ -31,15 +31,11 @@ public final class StringUtils {
         String page = new Scanner(url.openStream(), "UTF-8").useDelimiter("\\A").next();
         page = removeUTF8BOM(page.trim());
         for (String prefix : ACCEPTABLE_PAGE_PREFIXES) {
-            if (startsWith(page, prefix)) {
+            if (page.regionMatches(true, 0, prefix, 0, prefix.length())) {
                 return page;
             }
         }
         throw new IllegalArgumentException("This URL – " + url + " - does not contain HTML content");
-    }
-
-    private static boolean startsWith(String s, String prefix) {
-        return s.regionMatches(true, 0, prefix, 0, prefix.length());
     }
 
     private static String removeUTF8BOM(String s) {
@@ -70,11 +66,9 @@ public final class StringUtils {
 
     public static Map<String, Long> getWordsSortedMap(List<String> wordsList) {
         return wordsList.stream()
-                .collect(
-                        Collectors.groupingBy(
-                                Function.identity(),
-                                TreeMap::new,
-                                Collectors.counting())
-                );
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        TreeMap::new,
+                        Collectors.counting()));
     }
 }

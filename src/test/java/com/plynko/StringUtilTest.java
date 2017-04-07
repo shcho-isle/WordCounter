@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -38,6 +38,32 @@ public class StringUtilTest {
     }
 
     @Test
+    public void getWordsListTest() {
+        String page = "<!doctype html>\n" +
+                "<html>\n" +
+                "<head>\n" +
+                "    <title>Example Domain</title>\n" +
+                "    <style type=\"text/css\">\n" +
+                "    a:link, a:visited {\n" +
+                "        color: #38488f;\n" +
+                "        text-decoration: none;\n" +
+                "    }\n" +
+                "    </style>    \n" +
+                "</head>\n" +
+                "\n" +
+                "<body>\n" +
+                "<div>\n" +
+                "    <h1>Example Domain</h1>\n" +
+                "</div>\n" +
+                "</body>\n" +
+                "</html>";
+
+        List<String> actual = getWordsList(page);
+
+        Assert.assertEquals(Arrays.asList("Example", "Domain", "Example", "Domain"), actual);
+    }
+
+    @Test
     public void getWordsSortedMapTest() throws IOException {
         Map<String, Long> actual = getWordsSortedMap(Arrays.asList("aaa", "ddd", "aaa", "bbb", "ccc", "aaa", "aaa"));
         Map<String, Long> expected = new TreeMap<>();
@@ -46,6 +72,6 @@ public class StringUtilTest {
         expected.put("ccc", 1L);
         expected.put("ddd", 1L);
 
-        Assert.assertEquals(actual, expected);
+        Assert.assertEquals(expected, actual);
     }
 }
