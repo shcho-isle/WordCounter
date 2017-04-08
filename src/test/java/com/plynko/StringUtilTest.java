@@ -17,7 +17,7 @@ import static com.plynko.StringUtils.*;
 
 public class StringUtilTest {
     @Rule
-    public ExpectedException thrown= ExpectedException.none();
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void checkUrlTest() throws MalformedURLException {

@@ -38,19 +38,25 @@ public final class StringUtils {
         throw new IllegalArgumentException("This URL – " + url + " - does not contain HTML content");
     }
 
-    private static String removeUTF8BOM(String s) {
-        if (s.startsWith("\uFEFF")) {
-            s = s.substring(1);
+    private static String removeUTF8BOM(String page) {
+        String s;
+        if (page.startsWith("\uFEFF")) {
+            s = page.substring(1);
+        } else {
+            s = page;
         }
         return s;
     }
 
     public static List<String> getWordsList(String page) {
+        String s;
         if (IGNORED_TAGS.size() > 0) {
-            page = removeTags(page);
+            s = removeTags(page);
+        } else {
+            s = page;
         }
 
-        String[] wordsArray = page.split(DELIMITERS);
+        String[] wordsArray = s.split(DELIMITERS);
 
         return Arrays.stream(wordsArray)
                 .filter(w -> !w.matches(IGNORED_WORDS))
