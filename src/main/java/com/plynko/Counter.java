@@ -29,8 +29,8 @@ public class Counter {
         LOG.setUseParentHandlers(false);
     }
 
-    public static void main(String[] args) {
-        String page = null;
+    public static void main(String[] args) throws IOException {
+        String page;
         try {
             if (args.length == 0) {
                 throw new IllegalArgumentException("No URL specified.");
@@ -39,9 +39,8 @@ public class Counter {
             checkUrl(url);
             page = getPage(url);
         } catch (IOException | IllegalArgumentException e) {
-            e.printStackTrace();
             LOG.warning(e.toString());
-            System.exit(0);
+            throw e;
         }
 
         List<String> wordsList = getWordsList(page);
