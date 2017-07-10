@@ -22,7 +22,8 @@ public class Counter {
             fh = new FileHandler("wordCounter.log", true);
             fh.setFormatter(new SimpleFormatter());
             LOG.addHandler(fh);
-        } catch (SecurityException | IOException e) {
+        } catch (IOException e) {
+            System.err.println("Cannot create log file: ");
             e.printStackTrace();
         }
         LOG.setLevel(Level.INFO);
@@ -30,18 +31,12 @@ public class Counter {
     }
 
     public static void main(String[] args) throws IOException {
-        String page;
-        try {
-            if (args.length == 0) {
-                throw new IllegalArgumentException("No URL specified.");
-            }
-            URL url = new URL(args[0]);
-            checkUrl(url);
-            page = getPage(url);
-        } catch (IOException | IllegalArgumentException e) {
-            LOG.warning(e.toString());
-            throw e;
+        if (args.length == 0) {
+            throw new IllegalArgumentException("No URL specified.");
         }
+        URL url = new URL(args[0]);
+        checkUrl(url);
+        String page = getPage(url);
 
         List<String> wordsList = getWordsList(page);
         System.out.println("Total number of words is: " + wordsList.size());

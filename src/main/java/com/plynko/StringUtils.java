@@ -29,7 +29,7 @@ public final class StringUtils {
 
     public static String getPage(URL url) throws IOException {
         String page = new Scanner(url.openStream(), "UTF-8").useDelimiter("\\A").next();
-        page = removeUTF8BOM(page.trim());
+        page = removeBom(page.trim());
         for (String prefix : ACCEPTABLE_PAGE_PREFIXES) {
             if (page.regionMatches(true, 0, prefix, 0, prefix.length())) {
                 return page;
@@ -38,7 +38,7 @@ public final class StringUtils {
         throw new IllegalArgumentException("This URL – " + url + " - does not contain HTML content");
     }
 
-    private static String removeUTF8BOM(String page) {
+    private static String removeBom(String page) {
         String s;
         if (page.startsWith("\uFEFF")) {
             s = page.substring(1);
