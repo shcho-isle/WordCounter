@@ -29,7 +29,7 @@ public final class StringUtils {
     private StringUtils() {}
 
     /**
-     * Check if {@code URL} has one of the {@code ACCEPTABLE_PROTOCOLS}.
+     * Checks if the URL has one of the {@code ACCEPTABLE_PROTOCOLS}.
      *
      * @param  url the URL to check.
      * @throws IllegalArgumentException if none of the protocols match.
@@ -45,18 +45,18 @@ public final class StringUtils {
     }
 
     /**
-     * Downloads page from the Internet by given {@code URL}.
+     * Downloads page from the Internet for the given URL.
+     * Removes UTF8 BOM if present.
      * Checks if downloaded page has HTML content.
      *
      * @param  url the URL to download.
-     * @return downloaded page as a {@code String}, if it starts with one of the {@code ACCEPTABLE_PAGE_PREFIXES};
+     * @return the downloaded page as a string, if it starts with one of the {@code ACCEPTABLE_PAGE_PREFIXES};
      *         otherwise, {@code null}.
      * @throws IOException if an I/O exception occurs.
      */
     public static String getPage(URL url) throws IOException {
         String page = new Scanner(url.openStream(), "UTF-8").useDelimiter("\\A").next();
 
-        // remove UTF8 BOM
         page = page.startsWith("\uFEFF") ? page.substring(1) : page;
 
         for (String prefix : ACCEPTABLE_PAGE_PREFIXES) {
@@ -71,12 +71,12 @@ public final class StringUtils {
      * Looks for all words on the page, excluding tags and {@code IGNORED_WORDS}.
      *
      * @param  page the string which represent page content.
-     * @return the {@code List} of all found words.
+     * @return the list of all found words.
      */
     public static List<String> getWordsList(String page) {
-        String s = IGNORED_TAGS.size() > 0 ? removeTags(page) : page;
+        String clearPage = IGNORED_TAGS.size() > 0 ? removeTags(page) : page;
 
-        String[] wordsArray = s.split(DELIMITERS);
+        String[] wordsArray = clearPage.split(DELIMITERS);
 
         return Arrays.stream(wordsArray)
                 .filter(w -> !w.matches(IGNORED_WORDS))
