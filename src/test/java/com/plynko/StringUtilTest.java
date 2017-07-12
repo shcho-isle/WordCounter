@@ -6,8 +6,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -20,26 +18,21 @@ public class StringUtilTest {
     public final ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void checkUrlTest() throws MalformedURLException {
-        checkUrl(new URL("http://something.org"));
-    }
-
-    @Test
-    public void checkUrlInvalidProtocolTest() throws MalformedURLException {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Acceptable protocols: " + ACCEPTABLE_PROTOCOLS);
-        checkUrl(new URL("https://something.org"));
-    }
-
-    @Test
     public void getPageTest() throws IOException {
-        String page = getPage(new URL("http://example.com"));
+        String page = getPage("http://example.com");
         Assert.assertEquals(1270, page.length());
     }
 
     @Test
+    public void getPageInvalidProtocolTest() throws IOException {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Acceptable protocols: " + ACCEPTABLE_PROTOCOLS);
+        getPage("https://something.org");
+    }
+
+    @Test
     public void getNonHtmlContentTest() throws IOException {
-        String nonHtmlPage = getPage(new URL("http://humanstxt.org/humans.txt"));
+        String nonHtmlPage = getPage("http://humanstxt.org/humans.txt");
         Assert.assertNull(nonHtmlPage);
     }
 

@@ -1,7 +1,6 @@
 package com.plynko;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.FileHandler;
@@ -35,12 +34,11 @@ public class Counter {
             throw new IllegalArgumentException("No URL specified.");
         }
 
-        URL url = new URL(args[0]);
-        checkUrl(url);
+        String urlString = args[0];
+        String page = getPage(urlString);
 
-        String page = getPage(url);
         if (page == null) {
-            String errorMessage = "This URL – " + url + " - does not contain HTML content";
+            String errorMessage = "This URL – " + urlString + " - does not contain HTML content";
             System.err.println(errorMessage);
             LOG.warning(errorMessage);
             return;

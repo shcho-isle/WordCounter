@@ -29,32 +29,21 @@ public final class StringUtils {
     private StringUtils() {}
 
     /**
-     * Checks if the URL has one of the {@code ACCEPTABLE_PROTOCOLS}.
-     *
-     * @param  url the URL to check.
-     * @throws IllegalArgumentException if none of the protocols match.
-     */
-    public static void checkUrl(URL url) {
-        String urlProtocol = url.getProtocol();
-        for (String protocol : ACCEPTABLE_PROTOCOLS) {
-            if (urlProtocol.equals(protocol)) {
-                return;
-            }
-        }
-        throw new IllegalArgumentException("Acceptable protocols: " + ACCEPTABLE_PROTOCOLS);
-    }
-
-    /**
+     * Checks if the given string is proper URL.
      * Downloads page from the Internet for the given URL.
      * Removes UTF8 BOM if present.
      * Checks if downloaded page has HTML content.
      *
-     * @param  url the URL to download.
+     * @param  urlString the string which represent URL to download.
      * @return the downloaded page as a string, if it starts with one of the {@code ACCEPTABLE_PAGE_PREFIXES};
      *         otherwise, {@code null}.
      * @throws IOException if an I/O exception occurs.
+     * @throws IllegalArgumentException if URL does not has acceptable protocol.
      */
-    public static String getPage(URL url) throws IOException {
+    public static String getPage(String urlString) throws IOException {
+        URL url = new URL(urlString);
+        checkUrl(url);
+
         String page = new Scanner(url.openStream(), "UTF-8").useDelimiter("\\A").next();
 
         page = page.startsWith("\uFEFF") ? page.substring(1) : page;
@@ -65,6 +54,22 @@ public final class StringUtils {
             }
         }
         return null;
+    }
+
+    /**
+     * Checks if the URL has one of the {@code ACCEPTABLE_PROTOCOLS}.
+     *
+     * @param  url the URL to check.
+     * @throws IllegalArgumentException if none of the protocols match.
+     */
+    private static void checkUrl(URL url) {
+        String urlProtocol = url.getProtocol();
+        for (String protocol : ACCEPTABLE_PROTOCOLS) {
+            if (urlProtocol.equals(protocol)) {
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Acceptable protocols: " + ACCEPTABLE_PROTOCOLS);
     }
 
     /**
