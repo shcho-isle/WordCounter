@@ -34,7 +34,13 @@ public class StringUtilTest {
     @Test
     public void getPageTest() throws IOException {
         String page = getPage(new URL("http://example.com"));
-        Assert.assertEquals(page.length(), 1269);
+        Assert.assertEquals(1270, page.length());
+    }
+
+    @Test
+    public void getNonHtmlContentTest() throws IOException {
+        String nonHtmlPage = getPage(new URL("http://humanstxt.org/humans.txt"));
+        Assert.assertNull(nonHtmlPage);
     }
 
     @Test

@@ -34,9 +34,17 @@ public class Counter {
         if (args.length == 0) {
             throw new IllegalArgumentException("No URL specified.");
         }
+
         URL url = new URL(args[0]);
         checkUrl(url);
+
         String page = getPage(url);
+        if (page == null) {
+            String errorMessage = "This URL – " + url + " - does not contain HTML content";
+            System.err.println(errorMessage);
+            LOG.warning(errorMessage);
+            return;
+        }
 
         List<String> wordsList = getWordsList(page);
         System.out.println("Total number of words is: " + wordsList.size());
