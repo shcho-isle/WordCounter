@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static com.plynko.StringUtils.*;
+import static com.plynko.StringUtil.*;
 
 public class StringUtilTest {
     @Rule

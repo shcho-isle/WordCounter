@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/shcho-isle/word-counter.svg?branch=master)](https://travis-ci.org/shcho-isle/word-counter)
 
 - downloads a page from the Internet by given URL;
-- counts the total number of words on the page and the number of repetitions for each word.
+- counts the number of words on the page and the number of repetitions for each word.
 
 ## Launching
 

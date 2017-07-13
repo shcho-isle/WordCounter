@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * Stores util methods to work with URLs and Strings.
  */
-public final class StringUtils {
+public final class StringUtil {
 
     public static final List<String> ACCEPTABLE_PROTOCOLS = Arrays.asList("http", "test");
 
@@ -26,7 +26,7 @@ public final class StringUtils {
     private static final List<String> IGNORED_TAGS = Arrays.asList("style", "script", "image", "object");
 
     // Suppresses default constructor, ensuring non-instantiability.
-    private StringUtils() {}
+    private StringUtil() {}
 
     /**
      * Checks if the given string is proper URL.

@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import static com.plynko.StringUtils.*;
+import static com.plynko.StringUtil.*;
 
 public class Counter {
     private static final Logger LOG;
