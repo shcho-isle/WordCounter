@@ -17,24 +17,24 @@ public class StringUtilTest {
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
 
-    @Test
-    public void getPageTest() throws IOException {
-        String page = getPage("http://example.com");
-        Assert.assertEquals(1270, page.length());
-    }
-
-    @Test
-    public void getPageInvalidProtocolTest() throws IOException {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Acceptable protocols: " + ACCEPTABLE_PROTOCOLS);
-        getPage("https://something.org");
-    }
-
-    @Test
-    public void getNonHtmlContentTest() throws IOException {
-        String nonHtmlPage = getPage("http://humanstxt.org/humans.txt");
-        Assert.assertNull(nonHtmlPage);
-    }
+//    @Test
+//    public void getPageTest() throws IOException {
+//        String page = getPage("http://example.com");
+//        Assert.assertEquals(1270, page.length());
+//    }
+//
+//    @Test
+//    public void getPageInvalidProtocolTest() throws IOException {
+//        thrown.expect(IllegalArgumentException.class);
+//        thrown.expectMessage("Acceptable protocols: " + ACCEPTABLE_PROTOCOLS);
+//        getPage("https://something.org");
+//    }
+//
+//    @Test
+//    public void getNonHtmlContentTest() throws IOException {
+//        String nonHtmlPage = getPage("http://humanstxt.org/humans.txt");
+//        Assert.assertNull(nonHtmlPage);
+//    }
 
     @Test
     public void getWordsListTest() {
