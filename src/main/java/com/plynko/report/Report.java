@@ -1,5 +1,7 @@
 package com.plynko.report;
 
+import com.plynko.Page;
+
 public interface Report {
-    public void execute(String page);
+    void execute(Page page);
 }

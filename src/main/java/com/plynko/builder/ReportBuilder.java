@@ -1,5 +1,6 @@
-package com.plynko;
+package com.plynko.builder;
 
+import com.plynko.Page;
 import com.plynko.loader.PageLoader;
 import com.plynko.report.Report;
 
@@ -9,14 +10,14 @@ import java.util.List;
 
 public class ReportBuilder {
 
+    private Page page;
+
     private PageLoader loader;
 
     private List<Report> reports = new ArrayList<>();
 
-    private String urlString;
-
-    public void serUrlString(String urlString) {
-        this.urlString = urlString;
+    public ReportBuilder(Page page) {
+        this.page = page;
     }
 
     public void setLoader(PageLoader loader) {
@@ -28,14 +29,14 @@ public class ReportBuilder {
     }
 
     public void execute() throws IOException {
-        String page = loader.getPage(urlString);
+        String content = page.getContent(loader);
 
-        if (page == null) {
-            System.err.println("This URL – " + urlString + " - does not contain HTML content");
+        if (content == null) {
+            System.err.println(String.format("This URL – %s - does not contain HTML content", page.getUrlString()));
             return;
         }
 
-        for (Report r: reports) {
+        for (Report r : reports) {
             r.execute(page);
         }
     }

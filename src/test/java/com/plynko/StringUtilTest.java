@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static com.plynko.StringUtil.*;
-
 public class StringUtilTest {
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
@@ -35,42 +33,42 @@ public class StringUtilTest {
 //        String nonHtmlPage = getPage("http://humanstxt.org/humans.txt");
 //        Assert.assertNull(nonHtmlPage);
 //    }
-
-    @Test
-    public void getWordsListTest() {
-        String page = "<!doctype html>\n" +
-                "<html>\n" +
-                "<head>\n" +
-                "    <title>Example Domain</title>\n" +
-                "    <style type=\"text/css\">\n" +
-                "    a:link, a:visited {\n" +
-                "        color: #38488f;\n" +
-                "        text-decoration: none;\n" +
-                "    }\n" +
-                "    </style>    \n" +
-                "</head>\n" +
-                "\n" +
-                "<body>\n" +
-                "<div>\n" +
-                "    <h1>Example Domain</h1>\n" +
-                "</div>\n" +
-                "</body>\n" +
-                "</html>";
-
-        List<String> actual = getWordsList(page);
-
-        Assert.assertEquals(Arrays.asList("Example", "Domain", "Example", "Domain"), actual);
-    }
-
-    @Test
-    public void getWordsSortedMapTest() throws IOException {
-        Map<String, Long> actual = getWordsSortedMap(Arrays.asList("aaa", "ddd", "aaa", "bbb", "ccc", "aaa", "aaa"));
-        Map<String, Long> expected = new TreeMap<>();
-        expected.put("aaa", 4L);
-        expected.put("bbb", 1L);
-        expected.put("ccc", 1L);
-        expected.put("ddd", 1L);
-
-        Assert.assertEquals(expected, actual);
-    }
+//
+//    @Test
+//    public void getWordsListTest() {
+//        String page = "<!doctype html>\n" +
+//                "<html>\n" +
+//                "<head>\n" +
+//                "    <title>Example Domain</title>\n" +
+//                "    <style type=\"text/css\">\n" +
+//                "    a:link, a:visited {\n" +
+//                "        color: #38488f;\n" +
+//                "        text-decoration: none;\n" +
+//                "    }\n" +
+//                "    </style>    \n" +
+//                "</head>\n" +
+//                "\n" +
+//                "<body>\n" +
+//                "<div>\n" +
+//                "    <h1>Example Domain</h1>\n" +
+//                "</div>\n" +
+//                "</body>\n" +
+//                "</html>";
+//
+//        List<String> actual = getWordsList(page);
+//
+//        Assert.assertEquals(Arrays.asList("Example", "Domain", "Example", "Domain"), actual);
+//    }
+//
+//    @Test
+//    public void getWordsSortedMapTest() throws IOException {
+//        Map<String, Long> actual = getWordsSortedMap(Arrays.asList("aaa", "ddd", "aaa", "bbb", "ccc", "aaa", "aaa"));
+//        Map<String, Long> expected = new TreeMap<>();
+//        expected.put("aaa", 4L);
+//        expected.put("bbb", 1L);
+//        expected.put("ccc", 1L);
+//        expected.put("ddd", 1L);
+//
+//        Assert.assertEquals(expected, actual);
+//    }
 }
