@@ -1,7 +1,8 @@
 package com.plynko;
 
 import com.plynko.builder.ReportBuilder;
-import com.plynko.director.ReportDirector;
+import com.plynko.report.WordRepetitionsReport;
+import com.plynko.report.WordsAmountReport;
 
 import java.io.IOException;
 
@@ -12,11 +13,11 @@ public class Application {
             throw new IllegalArgumentException("No URL specified.");
         }
 
-        ReportDirector director = new ReportDirector();
-
         Page page = new Page(args[0]);
         ReportBuilder builder = new ReportBuilder(page);
-        director.constructAmountAndRepetitionsReport(builder);
+
+        builder.addReport(new WordsAmountReport());
+        builder.addReport(new WordRepetitionsReport());
 
         builder.execute();
     }

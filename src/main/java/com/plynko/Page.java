@@ -1,21 +1,16 @@
 package com.plynko;
 
-import com.plynko.loader.PageLoader;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class Page {
 
-    private static final List<String> ACCEPTABLE_PROTOCOLS = Arrays.asList("http", "test");
+    public static final List<String> ACCEPTABLE_PROTOCOLS = Arrays.asList("http", "test");
 
     // Sign by which we define the HTML content.
     private static final List<String> ACCEPTABLE_PAGE_PREFIXES = Arrays.asList("<!doctype html", "<html");
@@ -64,18 +59,16 @@ public class Page {
      * Removes UTF8 BOM if present.
      * Checks if downloaded page has HTML content.
      *
-     * @param loader the string which represent URL to download.
      * @return the content of page as a string, if it starts with one of the {@code ACCEPTABLE_PAGE_PREFIXES};
      * otherwise, {@code null}.
-     * @throws IOException              if an I/O exception occurs.
-     * @throws IllegalArgumentException if URL does not has acceptable protocol.
+     * @throws IOException if an I/O exception occurs.
      */
-    public String getContent(PageLoader loader) throws IOException {
+    public String getContent() throws IOException {
         if (content != null) {
             return content;
         }
 
-        content = loader.loadPage(url);
+        content = new Scanner(url.openStream(), "UTF-8").useDelimiter("\\A").next();
 
         content = content.startsWith("\uFEFF") ? content.substring(1) : content;
 
@@ -88,12 +81,7 @@ public class Page {
         return null;
     }
 
-    /**
-     * Looks for all words on the page, excluding tags and {@code IGNORED_WORDS}.
-     *
-     * @return the list of all found words.
-     */
-    public List<String> getWordsList() {
+    public List<String> getWordsList() throws IOException {
         if (wordsList != null) {
             return wordsList;
         }
@@ -102,7 +90,7 @@ public class Page {
             removeTags();
         }
 
-        String[] wordsArray = content.split(DELIMITERS);
+        String[] wordsArray = getContent().split(DELIMITERS);
 
         wordsList = Arrays.stream(wordsArray)
                 .filter(w -> !w.matches(IGNORED_WORDS))
@@ -111,29 +99,19 @@ public class Page {
         return wordsList;
     }
 
-    /**
-     * Replaces {@code IGNORED_TAGS} and their content with spaces.
-     *
-     * @return the string constructed by replacing each matching subsequence by the space.
-     */
-    private void removeTags() {
+    private void removeTags() throws IOException {
         String tags = IGNORED_TAGS.stream().collect(Collectors.joining("|"));
         String regex = String.format("<(%s)[^<]*?>.*?</\\1>", tags);
         Pattern pattern = Pattern.compile(regex, Pattern.CASE_INSENSITIVE | Pattern.DOTALL);
-        content = pattern.matcher(content).replaceAll(" ");
+        content = pattern.matcher(getContent()).replaceAll(" ");
     }
 
-    /**
-     * Counts the number of repetitions of each word and sorts words.
-     *
-     * @return the sorted map where the key is the number of repetitions and the value is the word.
-     */
-    public Map<String, Long> getWordsSortedMap() {
+    public Map<String, Long> getWordsSortedMap() throws IOException {
         if (wordsSortedMap != null) {
             return wordsSortedMap;
         }
 
-        wordsSortedMap = wordsList.stream()
+        wordsSortedMap = getWordsList().stream()
                 .collect(Collectors.groupingBy(
                         Function.identity(),
                         TreeMap::new,
