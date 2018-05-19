@@ -1,5 +1,7 @@
 package com.plynko;
 
+import sun.plugin.dom.exception.WrongDocumentException;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -30,10 +32,6 @@ public class Page {
     private List<String> wordsList;
 
     private Map<String, Long> wordsSortedMap;
-
-    public String getUrlString() {
-        return url.toString();
-    }
 
     /**
      * Checks if the given string is proper URL.
@@ -78,10 +76,10 @@ public class Page {
             }
         }
 
-        return null;
+        throw new WrongDocumentException(String.format("This URL – %s - does not contain HTML content", url.toString()));
     }
 
-    public List<String> getWordsList() throws IOException {
+    private List<String> getWordsList() throws IOException {
         if (wordsList != null) {
             return wordsList;
         }
@@ -97,6 +95,10 @@ public class Page {
                 .collect(Collectors.toList());
 
         return wordsList;
+    }
+
+    public int getWordsNumber() throws IOException {
+        return getWordsList().size();
     }
 
     private void removeTags() throws IOException {

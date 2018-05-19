@@ -22,13 +22,6 @@ public class ReportBuilder {
     }
 
     public void execute() throws IOException {
-        String content = page.getContent();
-
-        if (content == null) {
-            System.err.println(String.format("This URL – %s - does not contain HTML content", page.getUrlString()));
-            return;
-        }
-
         for (Report r : reports) {
             r.execute(page);
         }
